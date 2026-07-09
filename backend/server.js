@@ -7,7 +7,6 @@ const authRoutes = require('./routes/auth');
 const stadiumRoutes = require('./routes/stadium');
 const aiRoutes = require('./routes/ai');
 const errorHandler = require('./middleware/errorHandler');
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -16,9 +15,10 @@ app.use(helmet({
   crossOriginResourcePolicy: false, // needed to load assets if any in local dev
 }));
 app.use(cors({
-  origin: '*', // For development, allow all. In production, restrict to frontend domain.
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  origin: process.env.CLIENT_URL || "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 }));
 
 app.use(express.json());
