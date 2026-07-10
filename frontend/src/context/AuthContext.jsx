@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-
+const API = import.meta.env.VITE_API_URL;
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
       }
       try {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        const response = await axios.get('/api/auth/me');
+        const response = await axios.get(`${API}/auth/me`);
         setUser(response.data);
       } catch (err) {
         console.error('Error fetching current user:', err.message);
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post('/api/auth/login', { email, password });
+      const response = await axios.post(`${API}/auth/login`, { email, password });
       const { token: userToken, user: userData } = response.data;
       localStorage.setItem('token', userToken);
       setToken(userToken);
@@ -55,7 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (username, email, password, role) => {
     try {
-      const response = await axios.post('/api/auth/register', { username, email, password, role });
+      const response = await axios.post(`${API}/auth/register`, { username, email, password, role });
       const { token: userToken, user: userData } = response.data;
       localStorage.setItem('token', userToken);
       setToken(userToken);
