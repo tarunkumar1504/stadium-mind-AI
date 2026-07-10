@@ -1,5 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 const db = require('../config/db');
+const StadiumPoint = require('../models/StadiumPoint');
+const Alert = require('../models/Alert');
 
 let aiClient = null;
 if (process.env.GEMINI_API_KEY) {
