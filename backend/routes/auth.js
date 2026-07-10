@@ -1,32 +1,86 @@
+/**
+ * @file auth.js (routes)
+ * @description Authentication routes for StadiumPulse AI.
+ *
+ * Endpoints:
+ *   POST /api/auth/register  – Create a new account
+ *   POST /api/auth/login     – Authenticate and receive a JWT
+ *   GET  /api/auth/me        – Return current user (requires valid JWT)
+ *
+ * @module routes/auth
+ */
+
+'use strict';
+
 const express = require('express');
-const { check } = require('express-validator');
+const { body } = require('express-validator');
 const authController = require('../controllers/authController');
 const authMiddleware = require('../middleware/auth');
 
 const router = express.Router();
 
-// Register a new user
-router.post(
-  '/register',
-  [
-    check('username', 'Username is required').not().isEmpty(),
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please enter a password with 6 or more characters').isLength({ min: 6 })
-  ],
-  authController.register
-);
+// ---------------------------------------------------------------------------
+// Validation chains
+// ---------------------------------------------------------------------------
 
-// Login a user
-router.post(
-  '/login',
-  [
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Password is required').exists()
-  ],
-  authController.login
-);
+const registerValidation = [
+  body('username')
+    .trim()
+    .notEmpty()
+    .withMessage('Username is required.')
+    .isLength({ min: 3, max: 30 })
+    .withMessage('Username must be between 3 and 30 characters.'),
 
-// Get current user details
+  body('email')
+    .trim()
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('Please provide a valid email address.'),
+
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long.')
+    .matches(/\d/)
+    .withMessage('Password must contain at least one number.'),
+
+  body('role')
+    .optional()
+    .isIn(['fan', 'organizer'])
+    .withMessage('Role must be either "fan" or "organizer".'),
+];
+
+const loginValidation = [
+  body('email')
+    .trim()
+    .normalizeEmail()
+    .isEmail()
+    .withMessage('Please provide a valid email address.'),
+
+  body('password')
+    .notEmpty()
+    .withMessage('Password is required.'),
+];
+
+// ---------------------------------------------------------------------------
+// Routes
+// ---------------------------------------------------------------------------
+
+/**
+ * @route  POST /api/auth/register
+ * @access Public
+ */
+router.post('/register', registerValidation, authController.register);
+
+/**
+ * @route  POST /api/auth/login
+ * @access Public
+ */
+router.post('/login', loginValidation, authController.login);
+
+/**
+ * @route  GET /api/auth/me
+ * @access Private – requires valid JWT
+ */
 router.get('/me', authMiddleware(), authController.getMe);
 
 module.exports = router;

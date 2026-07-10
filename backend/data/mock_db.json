@@ -15,6 +15,22 @@
       "password": "$2a$10$rpMWE1ujHQq.2wHBlQSRbOa6As9IxqGHuhCoG5WNQ4ZGsd6NnIZDy",
       "role": "fan",
       "createdAt": "2026-07-08T18:38:06.799Z"
+    },
+    {
+      "id": "mock_user_1783680061631",
+      "username": "testuser_1783680061406",
+      "email": "testuser_1783680061406@example.com",
+      "password": "$2a$10$4412FQJdv98e1LKYQ7IBu.XErG8vRRCSIFcVUA7vDmm2tgz3izTfy",
+      "role": "fan",
+      "createdAt": "2026-07-10T10:41:01.832Z"
+    },
+    {
+      "id": "mock_user_1783680113033",
+      "username": "testuser_1783680112876",
+      "email": "testuser_1783680112876@example.com",
+      "password": "$2a$10$k1ytuhzTyjLtZefV0fRzK.ZIUYHVdplQfLuDSlJU1.fufBPp5hL7S",
+      "role": "fan",
+      "createdAt": "2026-07-10T10:41:53.211Z"
     }
   ],
   "stadiumPoints": [
