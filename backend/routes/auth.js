@@ -16,6 +16,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const authController = require('../controllers/authController');
 const authMiddleware = require('../middleware/auth');
+const { apiLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
 
@@ -69,13 +70,13 @@ const loginValidation = [
  * @route  POST /api/auth/register
  * @access Public
  */
-router.post('/register', registerValidation, authController.register);
+router.post('/register', apiLimiter, registerValidation, authController.register);
 
 /**
  * @route  POST /api/auth/login
  * @access Public
  */
-router.post('/login', loginValidation, authController.login);
+router.post('/login', apiLimiter, loginValidation, authController.login);
 
 /**
  * @route  GET /api/auth/me

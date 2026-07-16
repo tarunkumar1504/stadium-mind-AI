@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import { api } from '../context/AuthContext';
 import { useAccessibility } from '../context/AccessibilityContext';
-import { Bot, User, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, AlertCircle, RotateCcw } from 'lucide-react';
+import { Bot, User, Send, Mic, MicOff, Volume2, VolumeX, Sparkles, RotateCcw } from 'lucide-react';
 
 export default function ChatAssistant() {
   const [messages, setMessages] = useState([
@@ -89,7 +89,7 @@ export default function ChatAssistant() {
     setLoading(true);
 
     try {
-      const res = await axios.post('/api/ai/chat', {
+      const res = await api.post('/api/ai/chat', {
         prompt: trimmed,
         language,
         accessibilityMode: (localStorage.getItem('access-high-contrast') === 'true').toString()
@@ -143,29 +143,29 @@ export default function ChatAssistant() {
   ];
 
   return (
-    <div class="glass-panel rounded-2xl flex flex-col h-[560px] overflow-hidden">
+    <div className="glass-panel rounded-2xl flex flex-col h-[560px] overflow-hidden">
       
       {/* A. Chat Header */}
-      <div class="p-3 border-b border-white/5 bg-gray-900/60 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
-            <Bot class="w-5 h-5" />
+      <div className="p-3 border-b border-white/5 bg-gray-900/60 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="p-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+            <Bot className="w-5 h-5" />
           </div>
           <div>
-            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
-              StadiumPulse AI Assistant <Sparkles class="w-3.5 h-3.5 text-emerald-400" />
+            <h3 className="text-xs font-bold text-white flex items-center gap-1.5">
+              StadiumPulse AI Assistant <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             </h3>
-            <span class="text-[9px] text-gray-400">Gemini 1.5 Flash • Virtual Concierge</span>
+            <span className="text-[9px] text-gray-400">Gemini 1.5 Flash • Virtual Concierge</span>
           </div>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div className="flex items-center gap-2">
           {/* Language Selector */}
           <select 
             id="chat-lang"
             value={language}
             onChange={(e) => setLanguage(e.target.value)}
-            class="text-[10px] bg-gray-950 border border-white/10 rounded-md px-1.5 py-0.5 text-gray-300 focus:outline-none focus:border-emerald-500 accessible-focus"
+            className="text-[10px] bg-gray-950 border border-white/10 rounded-md px-1.5 py-0.5 text-gray-300 focus:outline-none focus:border-emerald-500 accessible-focus"
             aria-label="Select AI speech language"
           >
             <option value="English">English</option>
@@ -183,7 +183,7 @@ export default function ChatAssistant() {
                 setSpeakText(true);
               }
             }}
-            class={`p-1.5 rounded-lg border transition-all accessible-focus ${
+            className={`p-1.5 rounded-lg border transition-all accessible-focus ${
               speakText 
                 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400' 
                 : 'bg-gray-950 border-white/10 text-gray-400'
@@ -191,24 +191,24 @@ export default function ChatAssistant() {
             title={speakText ? "Mute Voice guidance" : "Unmute Voice guidance"}
             aria-label="Voice reading controls"
           >
-            {speakText ? <Volume2 class="w-3.5 h-3.5" /> : <VolumeX class="w-3.5 h-3.5" />}
+            {speakText ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
           </button>
 
           {/* Reset chat button */}
           <button
             onClick={clearChat}
-            class="p-1.5 rounded-lg bg-gray-950 border border-white/10 text-gray-400 hover:text-white transition-all accessible-focus"
+            className="p-1.5 rounded-lg bg-gray-950 border border-white/10 text-gray-400 hover:text-white transition-all accessible-focus"
             title="Reset Conversation"
             aria-label="Clear chat log"
           >
-            <RotateCcw class="w-3.5 h-3.5" />
+            <RotateCcw className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
       {/* B. Chat Log */}
       <div 
-        class="flex-grow p-4 overflow-y-auto space-y-4 bg-gray-950/20"
+        className="flex-grow p-4 overflow-y-auto space-y-4 bg-gray-950/20"
         role="log"
         aria-live="polite"
       >
@@ -217,20 +217,20 @@ export default function ChatAssistant() {
           return (
             <div 
               key={index}
-              class={`flex gap-2.5 max-w-[85%] ${isBot ? 'mr-auto' : 'ml-auto flex-row-reverse'}`}
+              className={`flex gap-2.5 max-w-[85%] ${isBot ? 'mr-auto' : 'ml-auto flex-row-reverse'}`}
             >
               {/* Avatar */}
-              <div class={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs ${
+              <div className={`w-7 h-7 rounded-full shrink-0 flex items-center justify-center text-xs ${
                 isBot 
                   ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-400' 
                   : 'bg-blue-500/10 border border-blue-500/30 text-blue-400'
               }`}>
-                {isBot ? <Bot class="w-4 h-4" /> : <User class="w-4 h-4" />}
+                {isBot ? <Bot className="w-4 h-4" /> : <User className="w-4 h-4" />}
               </div>
 
               {/* Message bubble */}
               <div>
-                <div class={`p-3 rounded-2xl text-xs leading-relaxed ${
+                <div className={`p-3 rounded-2xl text-xs leading-relaxed ${
                   isBot 
                     ? msg.error
                       ? 'bg-red-950/20 border border-red-500/20 text-red-200'
@@ -238,9 +238,9 @@ export default function ChatAssistant() {
                     : 'bg-emerald-500 text-black font-semibold'
                 }`}>
                   {/* Preserve spacing/linebreaks */}
-                  <span class="whitespace-pre-line">{msg.text}</span>
+                  <span className="whitespace-pre-line">{msg.text}</span>
                 </div>
-                <span class="text-[8px] text-gray-500 block mt-1 px-1.5">
+                <span className="text-[8px] text-gray-500 block mt-1 px-1.5">
                   {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
@@ -249,14 +249,14 @@ export default function ChatAssistant() {
         })}
 
         {loading && (
-          <div class="flex gap-2.5 max-w-[80%] mr-auto items-center">
-            <div class="w-7 h-7 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
-              <Bot class="w-4 h-4" />
+          <div className="flex gap-2.5 max-w-[80%] mr-auto items-center">
+            <div className="w-7 h-7 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center">
+              <Bot className="w-4 h-4" />
             </div>
-            <div class="p-3 bg-gray-900 border border-white/5 rounded-2xl flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce"></span>
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce delay-100"></span>
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce delay-200"></span>
+            <div className="p-3 bg-gray-900 border border-white/5 rounded-2xl flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce delay-100"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce delay-200"></span>
             </div>
           </div>
         )}
@@ -264,14 +264,14 @@ export default function ChatAssistant() {
       </div>
 
       {/* C. Quick prompts section */}
-      <div class="px-3 py-1.5 border-t border-white/5 bg-gray-950/40">
-        <span class="text-[9px] text-gray-500 font-bold block mb-1">QUICK QUERIES</span>
-        <div class="flex gap-1.5 overflow-x-auto pb-1 select-none whitespace-nowrap scroll-thin">
+      <div className="px-3 py-1.5 border-t border-white/5 bg-gray-950/40">
+        <span className="text-[9px] text-gray-500 font-bold block mb-1">QUICK QUERIES</span>
+        <div className="flex gap-1.5 overflow-x-auto pb-1 select-none whitespace-nowrap scroll-thin">
           {quickPrompts.map((q, idx) => (
             <button
               key={idx}
               onClick={() => handleQuickPrompt(q.text)}
-              class="px-2 py-1 rounded-full bg-gray-900 border border-white/10 hover:border-emerald-500/30 text-gray-300 text-[10px] transition-all accessible-focus shrink-0 font-medium"
+              className="px-2 py-1 rounded-full bg-gray-900 border border-white/10 hover:border-emerald-500/30 text-gray-300 text-[10px] transition-all accessible-focus shrink-0 font-medium"
             >
               {q.label}
             </button>
@@ -280,16 +280,16 @@ export default function ChatAssistant() {
       </div>
 
       {/* D. Input Bar */}
-      <div class="p-3 border-t border-white/5 bg-gray-900/60">
+      <div className="p-3 border-t border-white/5 bg-gray-900/60">
         <form 
           onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-          class="flex items-center gap-2"
+          className="flex items-center gap-2"
         >
           {/* Speech input toggle */}
           <button
             type="button"
             onClick={handleSpeechInput}
-            class={`p-2 rounded-xl border transition-all shrink-0 accessible-focus ${
+            className={`p-2 rounded-xl border transition-all shrink-0 accessible-focus ${
               isListening 
                 ? 'bg-red-500 text-black border-red-500 animate-pulse' 
                 : 'bg-gray-950 border-white/10 text-gray-400 hover:text-white'
@@ -297,7 +297,7 @@ export default function ChatAssistant() {
             title={isListening ? "Listening... Click to stop" : "Speak to prompt AI"}
             aria-label={isListening ? "Stop voice dictation" : "Start voice dictation"}
           >
-            {isListening ? <MicOff class="w-4 h-4" /> : <Mic class="w-4 h-4" />}
+            {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </button>
 
           {/* Text Input */}
@@ -307,7 +307,7 @@ export default function ChatAssistant() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={isListening ? "Listening dictation..." : "Type stadium question here..."}
-            class="flex-grow bg-gray-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 placeholder:text-gray-500 accessible-focus"
+            className="flex-grow bg-gray-950 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 placeholder:text-gray-500 accessible-focus"
             disabled={loading}
             aria-label="Stadium assistant search field"
           />
@@ -316,10 +316,10 @@ export default function ChatAssistant() {
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            class="p-2 rounded-xl bg-emerald-400 text-black font-semibold transition-all disabled:opacity-50 disabled:bg-gray-800 disabled:text-gray-500 accessible-focus shrink-0"
+            className="p-2 rounded-xl bg-emerald-400 text-black font-semibold transition-all disabled:opacity-50 disabled:bg-gray-800 disabled:text-gray-500 accessible-focus shrink-0"
             aria-label="Send query"
           >
-            <Send class="w-4 h-4" />
+            <Send className="w-4 h-4" />
           </button>
         </form>
       </div>

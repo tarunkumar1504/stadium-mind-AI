@@ -14,9 +14,14 @@
 
 'use strict';
 
+// Set environment variables before server load to ensure instant fallback to local JSON Mock DB
+process.env.MONGODB_URI = '';
+process.env.NODE_ENV = 'test';
+
 const request = require('supertest');
 const { app, server } = require('../server');
 const db = require('../config/db');
+const mongoose = require('mongoose');
 
 // ---------------------------------------------------------------------------
 // Lifecycle
@@ -30,7 +35,10 @@ beforeAll(async () => {
   }
 });
 
-afterAll((done) => { server.close(done); });
+afterAll(async () => {
+  await new Promise((resolve) => server.close(resolve));
+  await mongoose.disconnect();
+});
 
 // ---------------------------------------------------------------------------
 // Helpers

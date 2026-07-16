@@ -15,8 +15,8 @@ const OrganizerRoute = ({ children }) => {
   
   if (loading) {
     return (
-      <div class="flex items-center justify-center min-h-screen bg-gray-950">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -38,8 +38,8 @@ const PrivateRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <div class="flex items-center justify-center min-h-screen bg-gray-950">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-950">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-500"></div>
       </div>
     );
   }
@@ -49,14 +49,14 @@ const PrivateRoute = ({ children }) => {
 
 function AppContent() {
   return (
-    <div class="min-h-screen flex flex-col bg-gray-950 text-gray-100 selection:bg-emerald-500 selection:text-black">
+    <div className="min-h-screen flex flex-col bg-gray-950 text-gray-100 selection:bg-emerald-500 selection:text-black">
       {/* Decorative Background Elements */}
-      <div class="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
-      <div class="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
+      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
+      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none animate-pulse-slow"></div>
       
       <Navbar />
       
-      <main class="flex-grow flex flex-col">
+      <main className="flex-grow flex flex-col">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />

@@ -2,6 +2,7 @@ const StadiumPoint = require('../models/StadiumPoint');
 const Alert = require('../models/Alert');
 const db = require('../config/db');
 const { findShortestPath } = require('../utils/stadiumGraph');
+const { validationResult } = require('express-validator');
 
 // Helper to determine status based on crowd level
 const getStatusForCrowd = (level) => {
@@ -34,6 +35,11 @@ exports.getPoints = async (req, res, next) => {
 
 // 2. Update a specific point (e.g. simulation or staff input)
 exports.updatePoint = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { id } = req.params;
   const { crowdLevel, queueSize } = req.body;
 

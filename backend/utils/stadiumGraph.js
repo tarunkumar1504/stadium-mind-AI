@@ -84,6 +84,16 @@ const getDistance = (n1, n2) => {
   return Math.sqrt(dx * dx + dy * dy);
 };
 
+// Pre-calculate adjacency list statically once at module load
+const adjacencyList = {};
+Object.keys(nodes).forEach(nodeId => {
+  adjacencyList[nodeId] = [];
+});
+edges.forEach(edge => {
+  adjacencyList[edge.from].push({ to: edge.to, accessible: edge.accessible });
+  adjacencyList[edge.to].push({ to: edge.from, accessible: edge.accessible });
+});
+
 // Dijkstra solver
 const findShortestPath = (startId, endId, crowdWeights = {}, accessibilityMode = false) => {
   if (!nodes[startId] || !nodes[endId]) return null;
@@ -102,27 +112,29 @@ const findShortestPath = (startId, endId, crowdWeights = {}, accessibilityMode =
   distances[startId] = 0;
 
   while (queue.length > 0) {
-    // Sort queue by current distance
-    queue.sort((a, b) => distances[a] - distances[b]);
-    const currentId = queue.shift();
+    // Find index of the node in queue with the minimum distance
+    let minIndex = 0;
+    for (let i = 1; i < queue.length; i++) {
+      if (distances[queue[i]] < distances[queue[minIndex]]) {
+        minIndex = i;
+      }
+    }
+
+    const currentId = queue[minIndex];
 
     if (currentId === endId) break;
     if (distances[currentId] === Infinity) break;
 
-    const currentNode = nodes[currentId];
+    // Remove the current node from the queue
+    queue.splice(minIndex, 1);
 
-    // Find neighbors
-    const neighbors = [];
-    edges.forEach(edge => {
-      if (edge.from === currentId) {
-        neighbors.push({ to: edge.to, accessible: edge.accessible });
-      } else if (edge.to === currentId) {
-        // Bi-directional paths
-        neighbors.push({ to: edge.from, accessible: edge.accessible });
-      }
-    });
+    const currentNode = nodes[currentId];
+    const neighbors = adjacencyList[currentId] || [];
 
     neighbors.forEach(neighbor => {
+      // Only process neighbors still in the queue (unvisited)
+      if (!queue.includes(neighbor.to)) return;
+
       const neighborNode = nodes[neighbor.to];
       
       // Accessibility check
